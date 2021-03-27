@@ -17,6 +17,7 @@ Some dependencies that ensure the code quality are installed:
 
 - [eslint](https://eslint.org/)
 - [prettier](https://prettier.io/)
+- [jest](https://jestjs.io/)
 
 So you can run some `yarn` commands :
 
@@ -25,6 +26,7 @@ yarn lint # show eslint errors and warnings (only on JS files)
 yarn lint-fix # fix eslint errors and warnings (only on JS files)
 yarn prettier # fix prettier formating (on js, json, css, scss and md files)
 yarn prettier-check # check prettier formating (on js, json, css, scss and md files)
+yarn test # jest unit tests
 ```
 
 ## ADR
