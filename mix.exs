@@ -3,6 +3,7 @@ defmodule WkJob.Umbrella.MixProject do
 
   def project do
     [
+      app: :wk_job_umbrella,
       apps_path: "apps",
       version: "0.1.0",
       start_permanent: Mix.env() == :prod,
@@ -24,7 +25,14 @@ defmodule WkJob.Umbrella.MixProject do
   # Dependencies listed here are available only for this project
   # and cannot be accessed from applications inside the apps/ folder.
   defp deps do
-    []
+    [
+      # code quality only: [:dev] or [:dev, :test]
+      {:ex_check, "~> 0.14.0", only: [:dev], runtime: false},
+      {:dialyxir, "~> 1.1", only: [:dev], runtime: false},
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
+      {:ex_doc, "~> 0.23.0", only: [:dev], runtime: false},
+      {:doctor, "~> 0.17.0", only: [:dev], runtime: false}
+    ]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

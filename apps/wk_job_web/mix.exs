@@ -47,7 +47,10 @@ defmodule WkJobWeb.MixProject do
       {:gettext, "~> 0.11"},
       {:wk_job, in_umbrella: true},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+      # code quality only: [:dev] or [:dev, :test]
+      {:ex_doc, "~> 0.23.0", only: [:dev], runtime: false},
+      {:doctor, "~> 0.17.0", only: [:dev], runtime: false}
     ]
   end
 
