@@ -11,6 +11,22 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
 
+## Code quality
+
+Some dependencies that ensure the code quality are installed:
+
+- [eslint](https://eslint.org/)
+- [prettier](https://prettier.io/)
+
+So you can run some `yarn` commands :
+
+```shell
+yarn lint # show eslint errors and warnings (only on JS files)
+yarn lint-fix # fix eslint errors and warnings (only on JS files)
+yarn prettier # fix prettier formating (on js, json, css, scss and md files)
+yarn prettier-check # check prettier formating (on js, json, css, scss and md files)
+```
+
 ## ADR
 
 [yarn](https://yarnpkg.com/) package manager is used rather than [npm](https://www.npmjs.com/).
