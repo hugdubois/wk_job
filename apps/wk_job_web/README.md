@@ -4,12 +4,40 @@ To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
   * Create and migrate your database with `mix ecto.setup`
-  * Install Node.js dependencies with `npm install` inside the `assets` directory
+  * Install Node.js dependencies with `yarn install` inside the `assets` directory
   * Start Phoenix endpoint with `mix phx.server`
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+
+## Code quality
+
+Some dependencies that ensure the code quality are installed:
+
+- [eslint](https://eslint.org/)
+- [prettier](https://prettier.io/)
+- [jest](https://jestjs.io/)
+
+So you can run some `yarn` commands :
+
+```shell
+yarn lint # show eslint errors and warnings (only on JS files)
+yarn lint-fix # fix eslint errors and warnings (only on JS files)
+yarn prettier # fix prettier formating (on js, json, css, scss and md files)
+yarn prettier-check # check prettier formating (on js, json, css, scss and md files)
+yarn test # jest unit tests
+```
+
+## ADR
+
+[yarn](https://yarnpkg.com/) package manager is used rather than [npm](https://www.npmjs.com/).
+
+If you don't have it you could install it via :
+
+```shell
+npm install -g yarn
+```
 
 ## Learn more
 

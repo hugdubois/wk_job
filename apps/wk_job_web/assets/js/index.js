@@ -13,3 +13,13 @@ import "../css/app.scss"
 //     import socket from "./socket"
 //
 import "phoenix_html"
+import React from "react"
+import ReactDOM from "react-dom"
+import Greeter from "./components/Greeter"
+
+ReactDOM.render(
+  <React.StrictMode>
+    <Greeter message="with ReactJS" />
+  </React.StrictMode>,
+  document.getElementById("root")
+)
