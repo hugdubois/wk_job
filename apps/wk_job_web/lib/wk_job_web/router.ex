@@ -1,4 +1,5 @@
 defmodule WkJobWeb.Router do
+  @moduledoc false
   use WkJobWeb, :router
 
   pipeline :browser do
