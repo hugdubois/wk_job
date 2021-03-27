@@ -16,6 +16,8 @@ defmodule WkJob.DataCase do
 
   use ExUnit.CaseTemplate
 
+  alias Ecto.Adapters.SQL.Sandbox
+
   using do
     quote do
       alias WkJob.Repo
@@ -28,10 +30,10 @@ defmodule WkJob.DataCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(WkJob.Repo)
+    :ok = Sandbox.checkout(WkJob.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(WkJob.Repo, {:shared, self()})
+      Sandbox.mode(WkJob.Repo, {:shared, self()})
     end
 
     :ok
@@ -45,6 +47,7 @@ defmodule WkJob.DataCase do
       assert %{password: ["password is too short"]} = errors_on(changeset)
 
   """
+  @spec errors_on(Ecto.Changeset.t()) :: %{atom => [String.t() | map]}
   def errors_on(changeset) do
     Ecto.Changeset.traverse_errors(changeset, fn {message, opts} ->
       Regex.replace(~r"%{(\w+)}", message, fn _, key ->

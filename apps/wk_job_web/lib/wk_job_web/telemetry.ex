@@ -1,7 +1,17 @@
 defmodule WkJobWeb.Telemetry do
+  @moduledoc false
   use Supervisor
   import Telemetry.Metrics
 
+  @doc """
+  Start the telemetry supervisor tree
+  """
+  @spec start_link([Supervisor.option() | Supervisor.init_option()]) ::
+          {:ok, pid()}
+          | {:error,
+             {:already_started, pid()}
+             | {:shutdown, term()}
+             | term()}
   def start_link(arg) do
     Supervisor.start_link(__MODULE__, arg, name: __MODULE__)
   end
@@ -19,6 +29,10 @@ defmodule WkJobWeb.Telemetry do
     Supervisor.init(children, strategy: :one_for_one)
   end
 
+  @doc """
+  Define metrics
+  """
+  @spec metrics :: [Telemetry.Metrics.t()]
   def metrics do
     [
       # Phoenix Metrics
