@@ -15,11 +15,15 @@ import "../css/app.scss"
 import "phoenix_html"
 import React from "react"
 import ReactDOM from "react-dom"
-import Greeter from "./components/Greeter"
+import Applicant from "./components/Applicant"
 
 ReactDOM.render(
   <React.StrictMode>
-    <Greeter message="with ReactJS" />
+    <Applicant
+      name="Steve Jobs"
+      description="Producteur de pommes"
+      thumb="/images/steve.jpg"
+    />
   </React.StrictMode>,
   document.getElementById("root")
 )

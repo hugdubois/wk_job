@@ -39,3 +39,51 @@
   color: green;
   text-transform: capitalize;
 }
+
+.applicant {
+  display: flex;
+  align-items: center;
+  text-align: left;
+  border: solid 2px #d0d0d0;
+  background-color: #ffffff;
+  border-radius: .5em;
+  padding: .5em .8em .5em .5em;
+  margin-bottom: 1em;
+}
+
+.applicant .info {
+  display: flex;
+  flex-direction: column;
+}
+
+.applicant .name {
+  max-width: none;
+  font-weight: bold;
+  //margin: 0 0 10px 0;
+  text-transform: capitalize;
+}
+
+.applicant .description {
+  max-width: none;
+  font-weight: normal;
+  margin: 0;
+  padding-top: 7px;
+  color: #666;
+}
+
+.applicant .thumb {
+  overflow: hidden;
+  flex-shrink: 0;
+  width: 4em;
+  height: 4em;
+  background-color: #e8e8e8;
+  padding: .1em;
+  margin-right: .5em;
+  border-radius: 50%;
+}
+
+.applicant .thumb img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
