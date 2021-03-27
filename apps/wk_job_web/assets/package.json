@@ -5,6 +5,10 @@
   "scripts": {
     "deploy": "webpack --mode production",
     "watch": "webpack --mode development --watch",
+    "lint": "eslint . --ext .js,.jsx --quiet",
+    "lint-fix": "eslint . --ext .js,.jsx --fix",
+    "prettier": "prettier --write './**/*.{js,jsx,json,css,scss,md}'",
+    "prettier-check": "prettier --check './**/*.{js,jsx,json,css,scss,md}'",
     "test": ""
   },
   "dependencies": {
@@ -14,12 +18,17 @@
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
+    "babel-eslint": "^10.1.0",
     "babel-loader": "^8.0.0",
     "copy-webpack-plugin": "^5.1.1",
     "css-loader": "^3.4.2",
+    "eslint": "^7.23.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-prettier": "^3.3.1",
     "hard-source-webpack-plugin": "^0.13.1",
     "mini-css-extract-plugin": "^0.9.0",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
+    "prettier": "^2.2.1",
     "sass": "^1.32.8",
     "sass-loader": "^8.0.2",
     "terser-webpack-plugin": "^2.3.2",
