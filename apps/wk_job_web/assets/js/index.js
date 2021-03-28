@@ -15,11 +15,11 @@ import "../css/app.scss"
 import "phoenix_html"
 import React from "react"
 import ReactDOM from "react-dom"
-import Greeter from "./components/Greeter"
+import App from "./App"
 
 ReactDOM.render(
   <React.StrictMode>
-    <Greeter message="with ReactJS" />
+    <App />
   </React.StrictMode>,
   document.getElementById("root")
 )
