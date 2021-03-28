@@ -1,3 +1,5 @@
+import PropTypes from "prop-types"
+
 const Greeter = (props) => {
   return (
     <div className="greeter">
@@ -7,7 +9,7 @@ const Greeter = (props) => {
 }
 
 Greeter.propTypes /* remove-proptypes */ = {
-  message: String,
+  message: PropTypes.string.isRequired,
 }
 
 export default Greeter
