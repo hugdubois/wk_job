@@ -40,12 +40,25 @@
   text-transform: capitalize;
 }
 
+#root {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  text-align: center;
+  border-bottom: 1px solid #e3e3e3;
+  background: #eee;
+  border-radius: 6px;
+  padding: 3em 3em 1em;
+  margin-bottom: 3rem;
+}
+
 /* list */
 .list-container {
   text-align: left;
   background-color: #ffffff;
   margin: 0 2em;
   height: 400px;
+  width: 400px;
   overflow: hidden;
   padding-bottom: 10%;
 }
@@ -73,7 +86,7 @@
 .list-container .list-content {
   height: 100%;
   padding: 0.3em;
-  overflow-y: auto;
+  overflow-y: scroll;
 }
 
 .list-container .list-item,

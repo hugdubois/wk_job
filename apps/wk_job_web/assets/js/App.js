@@ -1,59 +1,73 @@
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
+import { DragDropContext } from "react-beautiful-dnd"
 import { useState } from "react"
-import Applicant from "./components/Applicant"
-import ListTitle from "./components/ListTitle"
+import DroppableApplicantsList from "./components/DroppableApplicantsList"
 import fakeData from "./fake_data"
 
-function App() {
-  const [applicantsToMeet, updateApplicantsToMeet] = useState(fakeData.to_meet)
-  const handleOnDragEnd = (result) => {
-    if (!result.destination) return
-    const items = Array.from(applicantsToMeet)
-    const [reorderedItem] = items.splice(result.source.index, 1)
-    items.splice(result.destination.index, 0, reorderedItem)
+const reorder = (list, startIndex, endIndex) => {
+  const result = Array.from(list)
+  const [removed] = result.splice(startIndex, 1)
+  result.splice(endIndex, 0, removed)
 
-    updateApplicantsToMeet(items)
+  return result
+}
+
+const move = (source, destination, droppableSource, droppableDestination) => {
+  const sourceClone = Array.from(source)
+  const destClone = Array.from(destination)
+  const [removed] = sourceClone.splice(droppableSource.index, 1)
+
+  destClone.splice(droppableDestination.index, 0, removed)
+
+  const result = {}
+  result[droppableSource.droppableId] = sourceClone
+  result[droppableDestination.droppableId] = destClone
+
+  return result
+}
+
+function App() {
+  const [applicants, updateApplicants] = useState(fakeData)
+
+  const handleOnDragEnd = (result) => {
+    const { source, destination } = result
+    if (!destination) return
+    if (source.droppableId === destination.droppableId) {
+      const items = reorder(
+        applicants[source.droppableId],
+        source.index,
+        destination.index
+      )
+      if (source.droppableId === "to_meet") {
+        updateApplicants({
+          to_meet: items,
+          in_interview: applicants.in_interview,
+        })
+      } else {
+        updateApplicants({ to_meet: applicants.to_meet, in_interview: items })
+      }
+    } else {
+      const newApplicants = move(
+        applicants[source.droppableId],
+        applicants[destination.droppableId],
+        source,
+        destination
+      )
+      updateApplicants(newApplicants)
+    }
   }
 
   return (
     <DragDropContext onDragEnd={handleOnDragEnd}>
-      <div className="list-container">
-        <ListTitle title="à rencontrer" count={applicantsToMeet.length} />
-        <Droppable droppableId="applicants">
-          {(provided) => (
-            <ul
-              className="list-content"
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-            >
-              {applicantsToMeet.map((applicant, index) => (
-                <Draggable
-                  key={applicant.id}
-                  draggableId={applicant.id}
-                  index={index}
-                >
-                  {(provided) => (
-                    <li
-                      className="list-item"
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      key={applicant.id}
-                    >
-                      <Applicant
-                        name={applicant.name}
-                        description={applicant.description}
-                        thumb={applicant.thumb}
-                      />
-                    </li>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </ul>
-          )}
-        </Droppable>
-      </div>
+      <DroppableApplicantsList
+        id="to_meet"
+        title="à rencontrer"
+        items={applicants.to_meet}
+      />
+      <DroppableApplicantsList
+        id="in_interview"
+        title="entretien"
+        items={applicants.in_interview}
+      />
     </DragDropContext>
   )
 }
