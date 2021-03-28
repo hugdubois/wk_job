@@ -1,3 +1,5 @@
+import PropTypes from "prop-types"
+
 const ListTitle = (props) => {
   return (
     <h3 className="list-title">
@@ -8,8 +10,8 @@ const ListTitle = (props) => {
 }
 
 ListTitle.propTypes /* remove-proptypes */ = {
-  title: String,
-  count: Number,
+  title: PropTypes.string.isRequired,
+  count: PropTypes.number.isRequired,
 }
 
 export default ListTitle

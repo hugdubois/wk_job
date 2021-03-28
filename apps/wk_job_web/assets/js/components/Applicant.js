@@ -1,3 +1,5 @@
+import PropTypes from "prop-types"
+
 const Applicant = (props) => {
   return (
     <div className="applicant">
@@ -13,9 +15,9 @@ const Applicant = (props) => {
 }
 
 Applicant.propTypes /* remove-proptypes */ = {
-  name: String,
-  description: String,
-  thumb: String,
+  name: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  thumb: PropTypes.string.isRequired,
 }
 
 export default Applicant

@@ -1,4 +1,5 @@
 import { Droppable, Draggable } from "react-beautiful-dnd"
+import PropTypes from "prop-types"
 import Applicant from "./Applicant"
 import ListTitle from "./ListTitle"
 
@@ -41,9 +42,15 @@ const DroppableApplicantsList = (props) => {
 }
 
 DroppableApplicantsList.propTypes /* remove-proptypes */ = {
-  id: String,
-  title: String,
-  items: Array,
+  id: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      thumb: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 }
 
 export default DroppableApplicantsList
