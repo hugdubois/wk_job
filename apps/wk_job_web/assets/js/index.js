@@ -15,15 +15,11 @@ import "../css/app.scss"
 import "phoenix_html"
 import React from "react"
 import ReactDOM from "react-dom"
-import Applicant from "./components/Applicant"
+import App from "./App"
 
 ReactDOM.render(
   <React.StrictMode>
-    <Applicant
-      name="Steve Jobs"
-      description="Producteur de pommes"
-      thumb="/images/steve.jpg"
-    />
+    <App />
   </React.StrictMode>,
   document.getElementById("root")
 )
