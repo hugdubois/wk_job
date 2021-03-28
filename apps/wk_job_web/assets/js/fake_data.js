@@ -25,4 +25,5 @@ export default {
       thumb: "/images/mark.jpg",
     },
   ],
+  in_interview: [],
 }
