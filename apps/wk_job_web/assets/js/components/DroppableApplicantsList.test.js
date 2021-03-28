@@ -27,4 +27,6 @@ test("renders a droppable applicants list", () => {
   expect(lstCountElement.length).toBe(1)
   expect(lstCountElement[0]).toHaveTextContent(/^2$/)
   expect(container.getElementsByClassName("applicant").length).toBe(2)
+
+  // TODO more tests are needed such as drag and drop management
 })
