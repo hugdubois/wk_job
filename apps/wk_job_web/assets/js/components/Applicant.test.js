@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react"
 import Applicant from "./Applicant"
 
-test("renders a applicant", () => {
+test("renders an applicant", () => {
   render(
     <Applicant
       id="my-id"

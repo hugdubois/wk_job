@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react"
 import ListTitle from "./ListTitle"
 
-test("renders a applicant", () => {
+test("renders a list title", () => {
   render(<ListTitle title="my title" count={13} />)
 
   const titleElement = screen.getByText(/my title/i)
