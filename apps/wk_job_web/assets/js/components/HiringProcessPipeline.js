@@ -1,6 +1,6 @@
+import { useState, useEffect } from "react"
 import PropTypes from "prop-types"
 import { DragDropContext } from "react-beautiful-dnd"
-import { useState } from "react"
 import DroppableApplicantsList from "./DroppableApplicantsList"
 
 // function to help us with reordering a list
@@ -31,6 +31,11 @@ const move = (source, destination, droppableSource, droppableDestination) => {
 const HiringProcessPipeline = (props) => {
   // state management
   const [applicants, updateApplicants] = useState(props.pipeline)
+  console.debug("HiringProcessPipeline : ", applicants)
+
+  useEffect(() => {
+    updateApplicants(props.pipeline)
+  }, [props.pipeline])
 
   // handle event on the drag end
   const handleOnDragEnd = (result) => {
@@ -102,4 +107,5 @@ HiringProcessPipeline.propTypes = {
     in_interview: PropTypes.arrayOf(applicantShape).isRequired,
   }),
 }
+
 export default HiringProcessPipeline

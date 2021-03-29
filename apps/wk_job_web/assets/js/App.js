@@ -1,22 +1,8 @@
-import { useState } from "react"
-import HiringProcessPipeline from "./components/HiringProcessPipeline"
-import fakeData from "./fake_data"
+import LiveHiringProcessPipeline from "./components/LiveHiringProcessPipeline"
 
 function App() {
-  const [job, updateJob] = useState(fakeData)
-
-  const handleOnChange = (newPipeline) => {
-    const newJob = { ...job, pipeline: newPipeline }
-    updateJob(newJob)
-  }
-
   return (
-    <HiringProcessPipeline
-      id={job.id}
-      title={job.title}
-      pipeline={job.pipeline}
-      onChange={handleOnChange}
-    />
+    <LiveHiringProcessPipeline jobId="e76c32e7-f88e-47ce-840c-dae0d5d17f28" />
   )
 }
 
