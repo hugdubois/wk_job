@@ -1,5 +1,14 @@
 /* This file is for your main application css. */
 @import "./phoenix.css";
+@import "./spinner.css";
+
+body {
+	margin: 0;
+	height: 100vh;
+	//display: flex;
+	align-items: center;
+	justify-content: center;
+}
 
 /* Alerts and form errors */
 .alert {
@@ -41,6 +50,7 @@
 }
 
 #root {
+  margin:auto;
   width: 100%;
   height: 100%;
 }
