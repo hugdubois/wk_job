@@ -1,4 +1,4 @@
-export default {
+const hiringProcessPipeline = {
   id: "e76c32e7-f88e-47ce-840c-dae0d5d17f28",
   title: "Stage - Account Manager",
   pipeline: {
@@ -30,4 +30,8 @@ export default {
     ],
     in_interview: [],
   },
+}
+
+export default {
+  hiringProcessPipeline,
 }

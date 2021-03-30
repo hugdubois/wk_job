@@ -2,3 +2,6 @@
 // allows you to do things like:
 // learn more: https://github.com/testing-library/jest-dom
 import "@testing-library/jest-dom"
+import fakeData from "./fake_data"
+
+global.fakeHiringProcessPipelineData = fakeData.hiringProcessPipeline

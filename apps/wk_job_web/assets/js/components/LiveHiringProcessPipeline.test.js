@@ -1,18 +1,83 @@
-import { render, act } from "@testing-library/react"
+import ReactDOM from "react-dom"
+import { act } from "@testing-library/react"
 import LiveHiringProcessPipeline from "./LiveHiringProcessPipeline"
+import "regenerator-runtime/runtime"
 
-test("renders a live hiring process pipeline display a spinner then display HiringProcessPipeline when timeout reached", () => {
-  jest.useFakeTimers()
-  const jobId = "my-id"
-  const { container } = render(<LiveHiringProcessPipeline jobId={jobId} />)
+let resolve
+global.fetch = () => {
+  return new Promise((r) => {
+    resolve = r
+  })
+}
 
-  expect(container.querySelector(".spinner")).not.toBe(null)
+describe("renders a LiveHiringProcessPipeline", () => {
+  test("display HiringProcessPipeline when fetch data", async () => {
+    const jobId = "my-id"
+    const container = document.createElement("div")
+    act(() => {
+      ReactDOM.render(<LiveHiringProcessPipeline jobId={jobId} />, container)
+    })
 
-  act(() => {
-    jest.runAllTimers()
+    expect(container.querySelector(".spinner")).not.toBe(null)
+
+    await act(async () => {
+      resolve({
+        ok: true,
+        json: () => {
+          return new Promise((r) => {
+            r(fakeHiringProcessPipelineData)
+          })
+        },
+      })
+    })
+
+    expect(container.querySelector(".spinner")).toBe(null)
+    expect(container.querySelector(".hiring-process-pipeline")).not.toBe(null)
   })
 
-  expect(container.querySelector(".spinner")).toBe(null)
-  expect(container.querySelector(".hiring-process-pipeline")).not.toBe(null)
-  // TODO more tests?
+  test("display ErrorMessage when fetch data fail 404", async () => {
+    const jobId = "my-id"
+    const container = document.createElement("div")
+    act(() => {
+      ReactDOM.render(<LiveHiringProcessPipeline jobId={jobId} />, container)
+    })
+
+    expect(container.querySelector(".spinner")).not.toBe(null)
+
+    await act(async () => {
+      resolve({
+        ok: false,
+        status: 404,
+      })
+    })
+
+    expect(container.querySelector(".spinner")).toBe(null)
+    expect(container.querySelector(".error-message")).not.toBe(null)
+    expect(container.querySelector(".error-message h4").innerHTML).toBe(
+      "Error 404 - Not Found"
+    )
+  })
+
+  test("display ErrorMessage when fetch data fail 500", async () => {
+    const jobId = "my-id"
+    const container = document.createElement("div")
+    act(() => {
+      ReactDOM.render(<LiveHiringProcessPipeline jobId={jobId} />, container)
+    })
+
+    expect(container.querySelector(".spinner")).not.toBe(null)
+
+    await act(async () => {
+      resolve({
+        ok: false,
+        status: 500,
+      })
+    })
+
+    expect(container.querySelector(".spinner")).toBe(null)
+    expect(container.querySelector(".error-message")).not.toBe(null)
+    expect(container.querySelector(".error-message h4").innerHTML).toBe(
+      "Error 500 - Server Error"
+    )
+  })
 })
