@@ -1,6 +1,7 @@
 import PropTypes from "prop-types"
 
-const baseUrl = ""
+const apiBaseUrl = "" // https://localhost:4000
+const wsBbaseUrl = "" // ws://localhost:4000
 
 const errorMessage = (code) => {
   switch (code) {
@@ -28,9 +29,14 @@ const handleErrors = (resp) => {
   return resp.json()
 }
 
+export const socketUrl = `${wsBbaseUrl}/socket`
+
 /* Fetch functions */
 export const fecthHiringProcessPipeline = (jobId) =>
-  fetch(`${baseUrl}/job/${jobId}/hiring_process_pipeline`).then(handleErrors)
+  fetch(`${apiBaseUrl}/images/job_pipeline.json?job_id=${jobId}`).then(
+    handleErrors
+  )
+//fetch(`${apiBaseUrl}/job/${jobId}/hiring_process_pipeline`).then(handleErrors)
 
 /* declare React components */
 export const ServicesErrorMessage = (props) => {

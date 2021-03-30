@@ -31,7 +31,6 @@ const move = (source, destination, droppableSource, droppableDestination) => {
 const HiringProcessPipeline = (props) => {
   // state management
   const [applicants, updateApplicants] = useState(props.pipeline)
-  console.debug("HiringProcessPipeline : ", applicants)
 
   useEffect(() => {
     updateApplicants(props.pipeline)
