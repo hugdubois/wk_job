@@ -4,6 +4,7 @@ defmodule WkJobWeb.UserSocket do
 
   ## Channels
   # channel "room:*", WkJobWeb.RoomChannel
+  channel("hiring_process_pipeline:*", WkJobWeb.HiringProcessPipelineChannel)
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
