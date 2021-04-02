@@ -1,4 +1,4 @@
-export default {
+const hiringProcessPipeline = {
   to_meet: [
     {
       id: "9540ab55-e9eb-48a7-a3a1-cdec46437641",
@@ -26,4 +26,8 @@ export default {
     },
   ],
   in_interview: [],
+}
+
+export default {
+  hiringProcessPipeline,
 }
