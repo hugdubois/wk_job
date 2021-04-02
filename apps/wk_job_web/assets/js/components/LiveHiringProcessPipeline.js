@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { fecthHiringProcessPipeline, ServicesErrorMessage } from "../services"
 import useChannel from "../hooks/useChannel"
 import HiringProcessPipeline from "./HiringProcessPipeline"
@@ -19,45 +19,38 @@ const hiringProcessPipelineReducer = (state, { event, payload }) => {
 
 const LiveHiringProcessPipeline = (props) => {
   const [jobId] = useState(props.jobId)
+  const [pipeline, setPipeline] = useState({ to_meet: [], in_interview: [] })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-  const [job, updateJob] = useState({
-    id: jobId,
-    title: "",
-    pipeline: { to_meet: [], in_interview: [] },
-  })
-  const [pipeline, broadcast] = useChannel(
+
+  const [broadcastedPipeline, broadcast] = useChannel(
     "hiring_process_pipeline:" + jobId,
     hiringProcessPipelineReducer,
-    job.pipeline
+    pipeline
   )
-
-  const broadcastAndUpdate = (job) => {
-    updateJob(job)
-    broadcast("move_applicant", job.pipeline)
-  }
 
   useEffect(() => {
     if (!loading) {
       fecthHiringProcessPipeline(jobId)
-        .then(broadcastAndUpdate, setError)
+        .then((pipeline) => {
+          setPipeline(pipeline)
+          setLoading(true)
+        }, setError)
         .then(() => setLoading(true))
     }
-  }, [broadcastAndUpdate, loading, jobId])
+  }, [jobId])
+
+  useEffect(() => setPipeline(broadcastedPipeline), [broadcastedPipeline])
+
+  if (!loading) return <Spinner />
+
+  if (error) return <ServicesErrorMessage error={error} />
 
   return (
-    <div>
-      {loading && error && <ServicesErrorMessage error={error} />}
-      {loading && !error && (
-        <HiringProcessPipeline
-          id={job.id}
-          title={job.title}
-          pipeline={pipeline}
-          onChange={(newPipeline) => broadcast("move_applicant", newPipeline)}
-        />
-      )}
-      {!loading && <Spinner />}
-    </div>
+    <HiringProcessPipeline
+      pipeline={pipeline}
+      onChange={(newPipeline) => broadcast("move_applicant", newPipeline)}
+    />
   )
 }
 

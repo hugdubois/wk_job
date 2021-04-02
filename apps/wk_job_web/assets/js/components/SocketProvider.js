@@ -15,10 +15,12 @@
 //
 import { Socket } from "phoenix"
 import SocketContext from "../contexts/SocketContext"
-import { useEffect, useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import PropTypes from "prop-types"
+import Spinner from "./Spinner"
 
 const SocketProvider = ({ url, options, children }) => {
+  const [isConnected, setConnected] = useState(false)
   const socket = useMemo(() => new Socket(url, { params: options }), [
     url,
     options,
@@ -26,7 +28,10 @@ const SocketProvider = ({ url, options, children }) => {
 
   useEffect(() => {
     socket.connect()
+    socket.onOpen(() => setConnected(true))
   }, [options, url, socket])
+
+  if (!isConnected) return <Spinner />
 
   return (
     <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>

@@ -33,7 +33,7 @@ import SocketContext from "../contexts/SocketContext"
 const useChannel = (channelTopic, reducer, initialState) => {
   const socket = useContext(SocketContext)
   const [state, dispatch] = useReducer(reducer, initialState)
-  const [broadcast, setBroadcast] = useState(mustJoinChannelWarning)
+  const [broadcast, setBroadcast] = useState(false)
 
   useEffect(() => joinChannel(socket, channelTopic, dispatch, setBroadcast), [
     channelTopic,
@@ -67,10 +67,5 @@ const joinChannel = (socket, channelTopic, dispatch, setBroadcast) => {
     channel.leave()
   }
 }
-
-const mustJoinChannelWarning = () => () =>
-  console.warn(
-    "useChannel broadcast function cannot be invoked before the channel has been joined"
-  )
 
 export default useChannel

@@ -1,11 +1,14 @@
-import LiveHiringProcessPipeline from "./components/LiveHiringProcessPipeline"
+import Job from "./components/Job"
 import SocketProvider from "./components/SocketProvider"
 import { socketUrl } from "./services"
 
 function App() {
   return (
     <SocketProvider url={socketUrl}>
-      <LiveHiringProcessPipeline jobId="e76c32e7-f88e-47ce-840c-dae0d5d17f28" />
+      <Job
+        id="e76c32e7-f88e-47ce-840c-dae0d5d17f28"
+        title="Stage - Account Manager"
+      />
     </SocketProvider>
   )
 }

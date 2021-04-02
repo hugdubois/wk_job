@@ -71,22 +71,19 @@ const HiringProcessPipeline = (props) => {
   }
 
   return (
-    <div key={props.id} className="hiring-process-pipeline">
-      <h2 className="title">{props.title}</h2>
-      <div className="pipeline">
-        <DragDropContext onDragEnd={handleOnDragEnd}>
-          <DroppableApplicantsList
-            id="to_meet"
-            title="à rencontrer"
-            items={applicants.to_meet}
-          />
-          <DroppableApplicantsList
-            id="in_interview"
-            title="entretien"
-            items={applicants.in_interview}
-          />
-        </DragDropContext>
-      </div>
+    <div className="pipeline">
+      <DragDropContext onDragEnd={handleOnDragEnd}>
+        <DroppableApplicantsList
+          id="to_meet"
+          title="à rencontrer"
+          items={applicants.to_meet}
+        />
+        <DroppableApplicantsList
+          id="in_interview"
+          title="entretien"
+          items={applicants.in_interview}
+        />
+      </DragDropContext>
     </div>
   )
 }
@@ -98,9 +95,7 @@ const applicantShape = PropTypes.shape({
 })
 
 HiringProcessPipeline.propTypes = {
-  id: PropTypes.string.isRequired,
   onChange: PropTypes.func,
-  title: PropTypes.string.isRequired,
   pipeline: PropTypes.shape({
     to_meet: PropTypes.arrayOf(applicantShape).isRequired,
     in_interview: PropTypes.arrayOf(applicantShape).isRequired,
