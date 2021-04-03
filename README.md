@@ -11,6 +11,16 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 Ready to run in production? Please [check Phoenix deployment guides](https://hexdocs.pm/phoenix/deployment.html).
 
+## Up and Running
+
+```shell
+mix do deps.get, ecto.create, ecto.migrate, run apps/wk_job/priv/repo/seeds.exs
+cd apps/wk_job_web/assets
+yarn install
+cd -
+mix phx.server
+```
+
 ## ADR
 
 ### JavaScript
