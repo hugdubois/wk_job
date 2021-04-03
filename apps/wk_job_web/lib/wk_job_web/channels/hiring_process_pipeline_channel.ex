@@ -79,11 +79,16 @@ defmodule WkJobWeb.HiringProcessPipelineChannel do
 
   """
   use WkJobWeb, :channel
+  require Logger
+
+  alias WkJob.Jobs
 
   @impl true
   def join("hiring_process_pipeline:" <> job_id, payload, socket) do
     if authorized?(payload, job_id) do
-      {:ok, socket}
+      hiring_process_pipeline = job_id |> Jobs.get_hiring_process_pipeline!()
+
+      {:ok, assign(socket, :hiring_process_pipeline, hiring_process_pipeline)}
     else
       {:error, %{reason: "unauthorized"}}
     end
@@ -95,16 +100,17 @@ defmodule WkJobWeb.HiringProcessPipelineChannel do
     {:reply, {:ok, payload}, socket}
   end
 
-  # TODO: implement it
-  # @impl true
-  # def handle_in("get_pipeline", payload, socket) do
-  # {:reply, {:ok, payload}, socket}
-  # end
-
   # This handler reprensents the movement of an applicant in the hiring process pipeline
-  # TODO: the persistence of the state
   @impl true
   def handle_in("move_applicant", payload, socket) do
+    Logger.debug(socket.assigns)
+    Logger.debug(payload)
+
+    hiring_process_pipeline =
+      socket.assigns.hiring_process_pipeline
+      |> Jobs.update_hiring_process_pipeline(payload)
+
+    assign(socket, :hiring_process_pipeline, hiring_process_pipeline)
     broadcast(socket, "move_applicant", payload)
     {:noreply, socket}
   end
