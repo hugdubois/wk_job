@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom"
-import { act, screen } from "@testing-library/react"
+import { act } from "@testing-library/react"
 import LiveHiringProcessPipeline from "./LiveHiringProcessPipeline"
 import "regenerator-runtime/runtime"
 

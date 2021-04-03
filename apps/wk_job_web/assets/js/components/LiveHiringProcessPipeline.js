@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect } from "react"
 import { fecthHiringProcessPipeline, ServicesErrorMessage } from "../services"
 import useChannel from "../hooks/useChannel"
 import HiringProcessPipeline from "./HiringProcessPipeline"
@@ -33,7 +33,7 @@ const LiveHiringProcessPipeline = (props) => {
     if (!loading) {
       fecthHiringProcessPipeline(jobId)
         .then((pipeline) => {
-          setPipeline(pipeline)
+          setPipeline(pipeline.data)
           setLoading(true)
         }, setError)
         .then(() => setLoading(true))

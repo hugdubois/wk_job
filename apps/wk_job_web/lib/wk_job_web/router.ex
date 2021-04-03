@@ -3,27 +3,29 @@ defmodule WkJobWeb.Router do
   use WkJobWeb, :router
 
   pipeline :browser do
-    plug :accepts, ["html"]
-    plug :fetch_session
-    plug :fetch_flash
-    plug :protect_from_forgery
-    plug :put_secure_browser_headers
+    plug(:accepts, ["html"])
+    plug(:fetch_session)
+    plug(:fetch_flash)
+    plug(:protect_from_forgery)
+    plug(:put_secure_browser_headers)
   end
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug(:accepts, ["json"])
   end
 
   scope "/", WkJobWeb do
-    pipe_through :browser
+    pipe_through(:browser)
 
-    get "/", PageController, :index
+    get("/", PageController, :index)
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", WkJobWeb do
-  #   pipe_through :api
-  # end
+  scope "/api/v1", WkJobWeb do
+    pipe_through(:api)
+
+    get("/jobs/:job_id/hiring-process-pipeline", HiringProcessPipelineController, :show)
+  end
 
   # Enables LiveDashboard only for development
   #
@@ -36,8 +38,8 @@ defmodule WkJobWeb.Router do
     import Phoenix.LiveDashboard.Router
 
     scope "/" do
-      pipe_through :browser
-      live_dashboard "/dashboard", metrics: WkJobWeb.Telemetry
+      pipe_through(:browser)
+      live_dashboard("/dashboard", metrics: WkJobWeb.Telemetry)
     end
   end
 end
