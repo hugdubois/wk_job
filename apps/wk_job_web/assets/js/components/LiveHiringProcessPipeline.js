@@ -8,7 +8,6 @@ import Spinner from "./Spinner"
 const hiringProcessPipelineReducer = (state, { event, payload }) => {
   // the second argument is the message sent over the channel
   // it will contain an event key and a payload key
-  console.log("reducer", state, event, payload)
   switch (event) {
     case "move_applicant":
       return payload
