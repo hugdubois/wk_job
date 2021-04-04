@@ -36,9 +36,6 @@ export const fecthHiringProcessPipeline = (jobId) =>
   fetch(`${apiBaseUrl}/jobs/${jobId}/hiring-process-pipeline`).then(
     handleErrors
   )
-//fetch(`${apiBaseUrl}/images/job_pipeline.json?job_id=${jobId}`).then(
-//handleErrors
-//)
 
 /* declare React components */
 export const ServicesErrorMessage = (props) => {

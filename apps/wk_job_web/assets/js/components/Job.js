@@ -1,11 +1,11 @@
 import PropTypes from "prop-types"
 import LiveHiringProcessPipeline from "./LiveHiringProcessPipeline"
 
-const Job = (props) => {
+const Job = ({ id, title }) => {
   return (
-    <div key={props.id} className="hiring-process-pipeline">
-      <h2 className="title">{props.title}</h2>
-      <LiveHiringProcessPipeline jobId="e76c32e7-f88e-47ce-840c-dae0d5d17f28" />
+    <div key={id} className="hiring-process-pipeline">
+      <h2 className="title">{title}</h2>
+      <LiveHiringProcessPipeline jobId={id} />
     </div>
   )
 }
