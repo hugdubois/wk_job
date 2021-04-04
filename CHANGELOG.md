@@ -10,6 +10,12 @@ All notable changes to this project will be documented in this file. See [standa
 * remove dead code commented ([2425b27](https://github.com/hugdubois/wk_job/commit/2425b2790fb3ee7ae38451b41ccd5e9324d82efb))
 * remove hard coded id in Job component ([27e0010](https://github.com/hugdubois/wk_job/commit/27e0010fe79bf85e82b6f3233a248c0d9f2e4ded))
 
+### [1.1.1](https://github.com/hugdubois/wk_job/compare/v1.1.0...v1.1.1) (2021-04-04)
+
+### Bug Fixes
+
+* remove header ([690118a](https://github.com/hugdubois/wk_job/commit/690118ab50606da0761e462d8e4d89a4503c99ad))
+
 ## 1.1.0 (2021-04-04)
 
 

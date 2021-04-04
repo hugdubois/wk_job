@@ -5,7 +5,7 @@ defmodule WkJob.Umbrella.MixProject do
     [
       app: :wk_job_umbrella,
       apps_path: "apps",
-      version: "1.1.1",
+      version: "1.1.2",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       aliases: aliases()
