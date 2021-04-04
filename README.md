@@ -33,6 +33,15 @@ If you don't have it you could install it via :
 npm install -g yarn
 ```
 
+## Todo
+
+- [ ] use [styled-components](https://styled-components.com/)
+- [ ] make responsive UI
+- [ ] add CI/CD [github actions](https://github.com/features/actions) + [circleci](https://circleci.com/)
+- [ ] add Dockerfile
+- [ ] improve tests coverage
+- [ ] improve documentation
+
 ## Learn more
 
   * Official website: https://www.phoenixframework.org/
@@ -42,6 +51,8 @@ npm install -g yarn
   * Source: https://github.com/phoenixframework/phoenix
 
 ## Code quality
+
+Commits follow [Conventional Commits](https://www.conventionalcommits.org/) and the workflow is [git-flow](http://danielkummer.github.io/git-flow-cheatsheet/).
 
 Some dependencies that ensure the code quality are installed:
 
