@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.3](https://github.com/hugdubois/wk_job/compare/v1.1.2...v1.1.3) (2021-04-04)
+
+
+### Bug Fixes
+
+* fix version - bump v1.1.3 ([be468b7](https://github.com/hugdubois/wk_job/commit/be468b7a3e7f2cd4e910e9b676df7f5a1191aace))
+
 ### [1.1.2](https://github.com/hugdubois/wk_job/compare/v1.1.1...v1.1.2) (2021-04-04)
 
 
