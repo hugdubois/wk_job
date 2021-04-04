@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.2](https://github.com/hugdubois/wk_job/compare/v1.1.1...v1.1.2) (2021-04-04)
+
+
+### Bug Fixes
+
+* remove dead code commented ([2425b27](https://github.com/hugdubois/wk_job/commit/2425b2790fb3ee7ae38451b41ccd5e9324d82efb))
+* remove hard coded id in Job component ([27e0010](https://github.com/hugdubois/wk_job/commit/27e0010fe79bf85e82b6f3233a248c0d9f2e4ded))
+
 ## 1.1.0 (2021-04-04)
 
 
