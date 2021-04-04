@@ -17,6 +17,10 @@ defmodule WkJobWeb do
   and import those modules here.
   """
 
+  @doc """
+  Imports for controller
+  """
+  @spec controller() :: no_return
   def controller do
     quote do
       use Phoenix.Controller, namespace: WkJobWeb
@@ -27,6 +31,10 @@ defmodule WkJobWeb do
     end
   end
 
+  @doc """
+  Imports for view
+  """
+  @spec view() :: no_return
   def view do
     quote do
       use Phoenix.View,
@@ -42,6 +50,10 @@ defmodule WkJobWeb do
     end
   end
 
+  @doc """
+  Imports for router
+  """
+  @spec router() :: no_return
   def router do
     quote do
       use Phoenix.Router
@@ -51,6 +63,10 @@ defmodule WkJobWeb do
     end
   end
 
+  @doc """
+  Imports for channel
+  """
+  @spec channel() :: no_return
   def channel do
     quote do
       use Phoenix.Channel

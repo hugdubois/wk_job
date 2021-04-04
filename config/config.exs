@@ -15,7 +15,7 @@ config :wk_job,
 
 config :wk_job_web,
   ecto_repos: [WkJob.Repo],
-  generators: [context_app: :wk_job]
+  generators: [context_app: :wk_job, binary_id: true]
 
 # Configures the endpoint
 config :wk_job_web, WkJobWeb.Endpoint,

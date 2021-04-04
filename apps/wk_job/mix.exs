@@ -39,7 +39,10 @@ defmodule WkJob.MixProject do
       {:phoenix_pubsub, "~> 2.0"},
       {:ecto_sql, "~> 3.4"},
       {:postgrex, ">= 0.0.0"},
-      {:jason, "~> 1.0"}
+      {:jason, "~> 1.0"},
+      # code quality only: [:dev] or [:dev, :test]
+      {:ex_doc, "~> 0.23.0", only: [:dev], runtime: false},
+      {:doctor, "~> 0.17.0", only: [:dev], runtime: false}
     ]
   end
 

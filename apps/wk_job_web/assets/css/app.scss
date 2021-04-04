@@ -1,5 +1,14 @@
 /* This file is for your main application css. */
 @import "./phoenix.css";
+@import "./spinner.css";
+
+body {
+  margin: 0;
+  height: 100vh;
+  //display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 /* Alerts and form errors */
 .alert {
@@ -33,4 +42,131 @@
   color: #a94442;
   display: block;
   margin: -1rem 0 2rem;
+}
+
+.greeter .message {
+  color: green;
+  text-transform: capitalize;
+}
+
+#root {
+  margin: auto;
+  width: 100%;
+  height: 100%;
+}
+
+.hiring-process-pipeline {
+  border-bottom: 1px solid #e3e3e3;
+  border-radius: 6px;
+  padding-bottom: 2em;
+  margin-bottom: 3rem;
+  background: #eee;
+  border-radius: 5px;
+}
+
+.hiring-process-pipeline .title {
+  font-weight: bold;
+  padding: 0 1em;
+  background-color: #334773;
+  color: #ffffff;
+  border-radius: 5px 5px 0 0;
+}
+
+.hiring-process-pipeline .pipeline {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  text-align: center;
+}
+
+/* list */
+.list-container {
+  text-align: left;
+  background-color: #ffffff;
+  margin: 0 0.2em;
+  height: 400px;
+  width: 400px;
+  overflow: hidden;
+  padding-bottom: 10%;
+  border-radius: 5px;
+}
+
+.list-container .list-title {
+  display: flex;
+  text-transform: uppercase;
+  font-weight: bold;
+  border-bottom: 1px solid #aaaaaa;
+  padding: 0.3em;
+  align-items: center;
+}
+
+.list-container .list-title .list-count {
+  width: 3em;
+  line-height: 3em;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 0.4em;
+  background-color: #aaaaaa;
+  color: #fff;
+  margin-left: 1em;
+}
+
+.list-container .list-content {
+  height: 100%;
+  padding: 0.3em;
+  overflow-y: scroll;
+}
+
+.list-container .list-item,
+.list-container li {
+  list-style: none;
+}
+
+/* applicant */
+.applicant {
+  display: flex;
+  align-items: center;
+  text-align: left;
+  border: solid 2px #d0d0d0;
+  background-color: #ffffff;
+  border-radius: 0.5em;
+  padding: 0.5em 0.8em 0.5em 0.5em;
+  margin-bottom: 1em;
+}
+
+.applicant .info {
+  display: flex;
+  flex-direction: column;
+}
+
+.applicant .name {
+  max-width: none;
+  font-weight: bold;
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.applicant .description {
+  max-width: none;
+  font-weight: normal;
+  margin: 0;
+  padding-top: 7px;
+  color: #666;
+}
+
+.applicant .thumb {
+  overflow: hidden;
+  flex-shrink: 0;
+  width: 4em;
+  height: 4em;
+  background-color: #e8e8e8;
+  padding: 0.1em;
+  margin-right: 0.5em;
+  border-radius: 50%;
+}
+
+.applicant .thumb img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
