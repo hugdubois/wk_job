@@ -1,3 +1,3 @@
 # WkJob
 
-**TODO: Add description**
+This is an elixir app to manage the backend layer.
