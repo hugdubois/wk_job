@@ -19,76 +19,35 @@ defmodule WkJobWeb.HiringProcessPipelineChannel do
   ### Payload
 
       %{
-        "in_interview" => [
-          %{
-            "description" => "applicant description",
-            "id" => "applicant UUID""
-            "name" => "applicant name",
-            "thumb" => "/path/to/avatar/image"
-          },
-          ...
-        "to_meet" => [
-          %{
-            "description" => "applicant description",
-            "id" => "applicant UUID""
-            "name" => "applicant name",
-            "thumb" => "/path/to/avatar/image"
-          },
-          ...
-        ]
+        "id" => "applicant UUID",
+        "from" => "to_meet | in_interview",
+        "to" => "to_meet | in_interview",
+        "position" => :int
       }
-
 
   ### Example
 
       %{
-        "in_interview" => [
-          %{
-            "description" => "Initiateur de liberté",
-            "id" => "4e6720e5-7c64-4a40-94b9-45e21272df83",
-            "name" => "Richard Stallman",
-            "thumb" => "/images/richard.jpg"
-          },
-          %{
-            "description" => "Vendeur de portes",
-            "id" => "e35a8c24-f4c5-4756-87d8-9024f481dea3",
-            "name" => "Bill Gates",
-            "thumb" => "/images/bill.jpg"
-          }
-        ],
-        "to_meet" => [
-          %{
-            "description" => "Producteur de pommes",
-            "id" => "9540ab55-e9eb-48a7-a3a1-cdec46437641",
-            "name" => "Steve Jobs",
-            "thumb" => "/images/steve.jpg"
-          },
-          %{
-            "description" => "Entremetteur de faux amis",
-            "id" => "d64c863a-233c-4f3b-8fa6-9fbe2a8bde78",
-            "name" => "Mark Zuckerberg",
-            "thumb" => "/images/mark.jpg"
-          }
-        ]
+        "id" => "e0537c6c-ebb3-4594-9b3b-be6e637c8ed3",
+        "from" => "to_meet",
+        "to" => "in_interview",
+        "position" => 0
       }
 
   ## Todo
 
-  - the persistence of the state
   - the security checks (authorization)
 
   """
   use WkJobWeb, :channel
   require Logger
 
-  alias WkJob.Jobs
+  # alias WkJob.Jobs
 
   @impl true
   def join("hiring_process_pipeline:" <> job_id, payload, socket) do
     if authorized?(payload, job_id) do
-      hiring_process_pipeline = job_id |> Jobs.get_hiring_process_pipeline!()
-
-      {:ok, assign(socket, :hiring_process_pipeline, hiring_process_pipeline)}
+      {:ok, assign(socket, :job_id, job_id)}
     else
       {:error, %{reason: "unauthorized"}}
     end
@@ -106,11 +65,11 @@ defmodule WkJobWeb.HiringProcessPipelineChannel do
     Logger.debug(socket.assigns)
     Logger.debug(payload)
 
-    hiring_process_pipeline =
-      socket.assigns.hiring_process_pipeline
-      |> Jobs.update_hiring_process_pipeline(payload)
+    # hiring_process_pipeline =
+    # socket.assigns.hiring_process_pipeline
+    # |> Jobs.update_hiring_process_pipeline(payload)
 
-    assign(socket, :hiring_process_pipeline, hiring_process_pipeline)
+    # assign(socket, :hiring_process_pipeline, hiring_process_pipeline)
     broadcast(socket, "move_applicant", payload)
     {:noreply, socket}
   end

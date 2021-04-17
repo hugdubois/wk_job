@@ -5,7 +5,7 @@ import HiringProcessPipeline from "./HiringProcessPipeline"
 import PropTypes from "prop-types"
 import Spinner from "./Spinner"
 
-const hiringProcessPipelineReducer = (state, { event, payload }) => {
+const hiringProcessPipelineReducer = (state, { event, payload }, pipeline) => {
   // the second argument is the message sent over the channel
   // it will contain an event key and a payload key
   switch (event) {
@@ -22,10 +22,10 @@ const LiveHiringProcessPipeline = (props) => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  const [broadcastedPipeline, broadcast] = useChannel(
+  const [broadcastedChange, broadcast] = useChannel(
     "hiring_process_pipeline:" + jobId,
     hiringProcessPipelineReducer,
-    pipeline
+    {}
   )
 
   useEffect(() => {
@@ -39,7 +39,24 @@ const LiveHiringProcessPipeline = (props) => {
     }
   }, [jobId])
 
-  useEffect(() => setPipeline(broadcastedPipeline), [broadcastedPipeline])
+  useEffect(() => {
+    if (!broadcastedChange.to) return
+    const { id, from, to, position } = broadcastedChange
+    const items = Array.from(pipeline[from])
+    const applicant = items.find((a) => a.id === id)
+    if (!applicant) return
+    const fromPosition = items.indexOf(applicant)
+    if (fromPosition < 0) return
+    const [removed] = items.splice(fromPosition, 1)
+    if (from == to) {
+      items.splice(position, 0, removed)
+      setPipeline({ ...pipeline, [from]: items })
+    } else {
+      const toClone = Array.from(pipeline[to])
+      toClone.splice(position, 0, removed)
+      setPipeline({ ...pipeline, [from]: items, [to]: toClone })
+    }
+  }, [broadcastedChange])
 
   if (!loading) return <Spinner />
 
@@ -48,7 +65,9 @@ const LiveHiringProcessPipeline = (props) => {
   return (
     <HiringProcessPipeline
       pipeline={pipeline}
-      onChange={(newPipeline) => broadcast("move_applicant", newPipeline)}
+      onChange={(applicantMovement) =>
+        broadcast("move_applicant", applicantMovement)
+      }
     />
   )
 }
