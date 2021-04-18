@@ -6,17 +6,16 @@ defmodule WkJobWeb.HiringProcessPipelineViewTest do
   import WkJobWeb.TestHelpers
 
   alias Ecto.UUID
-  alias WkJob.Jobs.Applicant
   alias WkJob.Jobs.HiringProcessPipeline
 
   @job_id UUID.generate()
-  @valid_applicant1_attrs %Applicant{
+  @valid_applicant1_attrs %{
     id: UUID.generate(),
     name: "applicant1 name",
     description: "applicant1 description",
     thumb: "/applicant1/avatar/thumb"
   }
-  @valid_applicant2_attrs %Applicant{
+  @valid_applicant2_attrs %{
     id: UUID.generate(),
     name: "applicant2 name",
     description: "applicant2 description",
@@ -31,8 +30,6 @@ defmodule WkJobWeb.HiringProcessPipelineViewTest do
   defp expected_hiring_process_pipeline,
     do:
       @hiring_process_pipeline
-      |> Map.delete(:inserted_at)
-      |> Map.delete(:updated_at)
       |> map_with_string_key()
 
   test "renders index.json" do

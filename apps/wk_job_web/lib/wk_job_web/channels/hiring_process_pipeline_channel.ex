@@ -42,7 +42,7 @@ defmodule WkJobWeb.HiringProcessPipelineChannel do
   use WkJobWeb, :channel
   require Logger
 
-  # alias WkJob.Jobs
+  alias WkJob.Jobs
 
   @impl true
   def join("hiring_process_pipeline:" <> job_id, payload, socket) do
@@ -65,11 +65,15 @@ defmodule WkJobWeb.HiringProcessPipelineChannel do
     Logger.debug(socket.assigns)
     Logger.debug(payload)
 
-    # hiring_process_pipeline =
-    # socket.assigns.hiring_process_pipeline
-    # |> Jobs.update_hiring_process_pipeline(payload)
+    to_list =
+      case payload["to"] do
+        "to_meet" -> :to_meet
+        "in_interview" -> :in_interview
+        _ -> nil
+      end
 
-    # assign(socket, :hiring_process_pipeline, hiring_process_pipeline)
+    Jobs.move_applicant_to_list(payload["id"], to_list, payload["position"])
+
     broadcast(socket, "move_applicant", payload)
     {:noreply, socket}
   end
