@@ -48,6 +48,7 @@ defmodule WkJobWeb.MixProject do
       {:wk_job, in_umbrella: true},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
+      {:ecto_psql_extras, "~> 0.2"},
       # code quality only: [:dev] or [:dev, :test]
       {:ex_doc, "~> 0.23.0", only: [:dev], runtime: false},
       {:doctor, "~> 0.17.0", only: [:dev], runtime: false}
