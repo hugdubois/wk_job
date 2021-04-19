@@ -11,33 +11,68 @@
 # and so on) as they will fail if something goes wrong.
 IO.puts("Adding a hiring process pipeline...")
 
-WkJob.Jobs.create_hiring_process_pipeline(%{
-  job_id: "e76c32e7-f88e-47ce-840c-dae0d5d17f28",
-  to_meet: [
+alias WkJob.Jobs
+
+job_id = "e76c32e7-f88e-47ce-840c-dae0d5d17f28"
+
+1..25
+|> Enum.map(fn i ->
+  n = i * 4 - 3
+
+  [
     %{
       description: "Producteur de pommes",
-      id: "9540ab55-e9eb-48a7-a3a1-cdec46437641",
-      name: "Steve Jobs",
+      job_id: job_id,
+      position: n - 1,
+      list: :to_meet,
+      name: "Steve Jobs (##{n})",
       thumb: "/images/steve.jpg"
     },
     %{
       description: "Vendeur de portes",
-      id: "e35a8c24-f4c5-4756-87d8-9024f481dea3",
-      name: "Bill Gates",
+      job_id: job_id,
+      position: n,
+      list: :to_meet,
+      name: "Bill Gates (##{n + 1})",
       thumb: "/images/bill.jpg"
     },
     %{
       description: "Initiateur de liberté",
-      id: "4e6720e5-7c64-4a40-94b9-45e21272df83",
-      name: "Richard Stallman",
+      job_id: job_id,
+      position: n + 1,
+      list: :to_meet,
+      name: "Richard Stallman (##{n + 2})",
       thumb: "/images/richard.jpg"
     },
     %{
       description: "Entremetteur de faux amis",
-      id: "d64c863a-233c-4f3b-8fa6-9fbe2a8bde78",
-      name: "Mark Zuckerberg",
+      job_id: job_id,
+      position: n + 2,
+      list: :to_meet,
+      name: "Mark Zuckerberg (##{n + 3})",
       thumb: "/images/mark.jpg"
     }
-  ],
-  in_interview: []
-})
+  ]
+end)
+|> Enum.concat()
+|> Enum.each(&Jobs.create_applicant/1)
+
+# 1..1_000
+1..10
+|> Enum.map(fn job_i ->
+  job_id = Ecto.UUID.generate()
+
+  # 1..100
+  1..10
+  |> Enum.map(fn applicant_i ->
+    %{
+      description: "Producteur de pommes",
+      job_id: job_id,
+      position: applicant_i,
+      list: Enum.random([:to_meet, :in_interview]),
+      name: "Steve Jobs (##{applicant_i})",
+      thumb: "/images/steve.jpg"
+    }
+  end)
+  |> Enum.each(&Jobs.create_applicant/1)
+end)

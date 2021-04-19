@@ -39,7 +39,7 @@ defmodule WkJobWeb.Router do
 
     scope "/" do
       pipe_through(:browser)
-      live_dashboard("/dashboard", metrics: WkJobWeb.Telemetry)
+      live_dashboard("/dashboard", metrics: WkJobWeb.Telemetry, ecto_repos: [WkJob.Repo])
     end
   end
 end

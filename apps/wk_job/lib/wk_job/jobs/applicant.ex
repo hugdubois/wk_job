@@ -1,22 +1,31 @@
 defmodule WkJob.Jobs.Applicant do
   @moduledoc """
-  The module is an applicant to a hiring process pipeline
+  The module is a applicant to a job
   """
   use Ecto.Schema
   import Ecto.Changeset
-  alias WkJob.Jobs.Applicant
 
   @type t :: %__MODULE__{
-          id: Ecto.UUID.t(),
           name: String.t(),
           description: String.t(),
-          thumb: String.t()
+          thumb: String.t(),
+          position: :integer,
+          list: :to_meet | :in_interview,
+          job_id: Ecto.UUID.t(),
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
         }
-
-  embedded_schema do
-    field(:description, :string)
+  @primary_key {:id, :binary_id, autogenerate: true}
+  @foreign_key_type :binary_id
+  schema "applicants" do
     field(:name, :string)
+    field(:description, :string)
     field(:thumb, :string)
+    field(:position, :integer)
+    field(:list, Ecto.Enum, values: [:to_meet, :in_interview])
+    field(:job_id, Ecto.UUID)
+
+    timestamps()
   end
 
   @doc false
@@ -24,9 +33,9 @@ defmodule WkJob.Jobs.Applicant do
           t() | Ecto.Schema.t() | Ecto.Changeset.t(t()) | {map(), map()},
           %{binary() => term()} | %{atom() => term()} | :invalid
         ) :: Ecto.Changeset.t(t())
-  def changeset(%Applicant{} = applicant, attrs) do
+  def changeset(applicant, attrs) do
     applicant
-    |> cast(attrs, [:id, :name, :description, :thumb])
-    |> validate_required([:name, :description, :thumb])
+    |> cast(attrs, [:name, :description, :thumb, :position, :list, :job_id])
+    |> validate_required([:name, :description, :thumb, :list, :job_id])
   end
 end

@@ -10,23 +10,27 @@ defmodule WkJobWeb.HiringProcessPipelineControllerTest do
     id: UUID.generate(),
     name: "applicant1 name",
     description: "applicant1 description",
-    thumb: "/applicant1/avatar/thumb"
+    thumb: "/applicant1/avatar/thumb",
+    position: 0,
+    list: :to_meet,
+    job_id: @job_id
   }
   @valid_applicant2_attrs %{
     id: UUID.generate(),
     name: "applicant2 name",
     description: "applicant2 description",
-    thumb: "/applicant2/avatar/thumb"
-  }
-  @valid_attrs %{
-    job_id: @job_id,
-    to_meet: [@valid_applicant1_attrs],
-    in_interview: [@valid_applicant2_attrs]
+    thumb: "/applicant2/avatar/thumb",
+    position: 1,
+    list: :to_meet,
+    job_id: @job_id
   }
 
   @spec fixture(atom()) :: HiringProcessPipeline.t()
   def fixture(:hiring_process_pipeline) do
-    {:ok, hiring_process_pipeline} = Jobs.create_hiring_process_pipeline(@valid_attrs)
+    {:ok, _} = Jobs.create_applicant(@valid_applicant1_attrs)
+    {:ok, _} = Jobs.create_applicant(@valid_applicant2_attrs)
+    {:ok, hiring_process_pipeline} = Jobs.get_hiring_process_pipeline(@job_id)
+
     hiring_process_pipeline
   end
 
@@ -48,9 +52,17 @@ defmodule WkJobWeb.HiringProcessPipelineControllerTest do
     end
 
     test "404 error when job_id doesn't exist", %{conn: conn} do
-      conn = get(conn, Routes.hiring_process_pipeline_path(conn, :show, UUID.generate()))
+      job_id = UUID.generate()
+      conn = get(conn, Routes.hiring_process_pipeline_path(conn, :show, job_id))
 
-      assert json_response(conn, 404) == "Not Found"
+      assert json_response(conn, 200) ==
+               render_json("show.json",
+                 hiring_process_pipeline: %{
+                   job_id: job_id,
+                   to_meet: [],
+                   in_interview: []
+                 }
+               )
     end
 
     test "404 error when job_id isn't a UUID", %{conn: conn} do

@@ -38,7 +38,7 @@ const HiringProcessPipeline = (props) => {
 
   // handle event on the drag end
   const handleOnDragEnd = (result) => {
-    const { source, destination } = result
+    const { draggableId, source, destination } = result
 
     if (!destination) return
 
@@ -55,7 +55,10 @@ const HiringProcessPipeline = (props) => {
           in_interview: applicants.in_interview,
         }
       } else {
-        newApplicants = { to_meet: applicants.to_meet, in_interview: items }
+        newApplicants = {
+          to_meet: applicants.to_meet,
+          in_interview: items,
+        }
       }
     } else {
       newApplicants = move(
@@ -67,7 +70,14 @@ const HiringProcessPipeline = (props) => {
     }
     updateApplicants(newApplicants)
 
-    if (typeof props.onChange === "function") props.onChange(newApplicants)
+    if (typeof props.onChange === "function") {
+      props.onChange({
+        id: draggableId,
+        from: source.droppableId,
+        to: destination.droppableId,
+        position: destination.index,
+      })
+    }
   }
 
   return (
