@@ -22,11 +22,7 @@ defmodule WkJob.Jobs.Applicant do
     field(:description, :string)
     field(:thumb, :string)
     field(:position, :integer)
-
-    # TODO : make list entity then add the relation : belongs_to :list, WkJob.Jobs.List
     field(:list, Ecto.Enum, values: [:to_meet, :in_interview])
-
-    # TODO : make job entity then add the relation : belongs_to :job, WkJob.Jobs.Job
     field(:job_id, Ecto.UUID)
 
     timestamps()
@@ -41,10 +37,5 @@ defmodule WkJob.Jobs.Applicant do
     applicant
     |> cast(attrs, [:name, :description, :thumb, :position, :list, :job_id])
     |> validate_required([:name, :description, :thumb, :list, :job_id])
-
-    # TODO when list entity is created do :
-    # |> foreign_key_constraint(:list_id)
-    # TODO when job entity is created do :
-    # |> foreign_key_constraint(:job_id)
   end
 end

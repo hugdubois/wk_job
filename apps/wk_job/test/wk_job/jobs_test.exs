@@ -89,6 +89,28 @@ defmodule WkJob.JobsTest do
       assert applicant.thumb == "some thumb"
     end
 
+    test "create_applicant/1 with valid data creates a applicant and reorders the list" do
+      job_id = Ecto.UUID.generate()
+      initial_to_meet_list = applicant_list_fixture(job_id, :to_meet, 3)
+      [applicant1, applicant2, applicant3] = initial_to_meet_list
+
+      assert {:ok, %HiringProcessPipeline{to_meet: ^initial_to_meet_list}} =
+               Jobs.get_hiring_process_pipeline(job_id)
+
+      new_applicant = applicant_fixture(%{job_id: job_id, list: :to_meet, position: 1})
+
+      assert {:ok, %HiringProcessPipeline{to_meet: to_meet}} =
+               Jobs.get_hiring_process_pipeline(job_id)
+
+      assert remove_updated_at(to_meet) ==
+               remove_updated_at([
+                 %Applicant{applicant1 | position: 0},
+                 new_applicant,
+                 %Applicant{applicant2 | position: 2},
+                 %Applicant{applicant3 | position: 3}
+               ])
+    end
+
     test "create_applicant/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{} = changeset} = Jobs.create_applicant(@invalid_attrs)
       assert "can't be blank" in errors_on(changeset).name
@@ -139,6 +161,28 @@ defmodule WkJob.JobsTest do
       applicant = applicant_fixture()
       assert {:ok, %Applicant{}} = Jobs.delete_applicant(applicant)
       assert_raise Ecto.NoResultsError, fn -> Jobs.get_applicant!(applicant.id) end
+    end
+
+    test "delete_applicant/1 deletes the applicant and reorders the list" do
+      job_id = Ecto.UUID.generate()
+      initial_to_meet_list = applicant_list_fixture(job_id, :to_meet, 3)
+      [applicant1, applicant2, applicant3] = initial_to_meet_list
+
+      assert {:ok, %HiringProcessPipeline{to_meet: ^initial_to_meet_list}} =
+               Jobs.get_hiring_process_pipeline(job_id)
+
+      assert {:ok, %Applicant{} = deleted_applicant} = Jobs.delete_applicant(applicant1)
+      assert applicant1.id == deleted_applicant.id
+      assert_raise Ecto.NoResultsError, fn -> Jobs.get_applicant!(applicant1.id) end
+
+      assert {:ok, %HiringProcessPipeline{to_meet: to_meet}} =
+               Jobs.get_hiring_process_pipeline(job_id)
+
+      assert remove_updated_at(to_meet) ==
+               remove_updated_at([
+                 %Applicant{applicant2 | position: 0},
+                 %Applicant{applicant3 | position: 1}
+               ])
     end
 
     test "change_applicant/1 returns a applicant changeset" do

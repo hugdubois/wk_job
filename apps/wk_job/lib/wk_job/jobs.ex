@@ -62,7 +62,6 @@ defmodule WkJob.Jobs do
     |> case do
       {:ok, %{updated_applicant: updated_applicant}} -> {:ok, updated_applicant}
       {:ok, %Applicant{} = applicant} -> {:ok, applicant}
-      {:error, _} = error -> error
     end
   rescue
     error -> {:error, error}
@@ -83,108 +82,45 @@ defmodule WkJob.Jobs do
          %Applicant{list: desired_list} = applicant,
          desired_position,
          desired_list
-       ) do
-    Multi.new()
-    |> Multi.run(:updated_applicant, fn _, _ ->
-      # TODO use a Multi pipe ?
-      reorder_applicants_list_after_update(applicant, desired_position)
-      update_applicant(applicant, %{position: desired_position})
-    end)
-    |> Repo.transaction()
-  end
+       ),
+       do:
+         Multi.new()
+         |> Multi.update_all(
+           :update_positions,
+           fn _ -> reorder_applicants_list_before_update(applicant, desired_position) end,
+           []
+         )
+         |> Multi.update(
+           :updated_applicant,
+           change_applicant(applicant, %{position: desired_position})
+         )
+         |> Repo.transaction()
 
   # Move an applicant to another list => reorder and move
   defp reorder_applicants_lists(
-         %Applicant{job_id: job_id} = applicant,
+         %Applicant{} = applicant,
          desired_position,
          desired_list
-       ) do
-    placeholder = %Applicant{applicant | list: desired_list, position: desired_position}
-
-    Multi.new()
-    |> Multi.run(:updated_applicant, fn _, _ ->
-      # TODO use a Multi pipe ?
-
-      replaced_placeholder =
-        from(a in Applicant,
-          where:
-            a.position == ^desired_position and
-              a.list == ^desired_list and
-              a.job_id == ^job_id
-        )
-        |> Repo.one()
-
-      reorder_applicants_list_after_removing(applicant)
-      reorder_applicants_list_after_adding(placeholder)
-
-      if replaced_placeholder,
-        do: update_applicant(replaced_placeholder, %{position: desired_position + 1})
-
-      update_applicant(applicant, %{list: desired_list, position: desired_position})
-    end)
-    |> Repo.transaction()
-  end
-
-  defp reorder_applicants_list_after_removing(%Applicant{
-         job_id: job_id,
-         list: list,
-         position: position
-       }),
-       do:
-         from(a in Applicant,
-           where:
-             a.position > ^position and
-               a.list == ^list and
-               a.job_id == ^job_id,
-           update: [inc: [position: -1]]
-         )
-         |> Repo.update_all([])
-
-  defp reorder_applicants_list_after_adding(%Applicant{
-         job_id: job_id,
-         list: list,
-         position: position
-       }),
-       do:
-         from(a in Applicant,
-           where:
-             a.position > ^position and
-               a.list == ^list and
-               a.job_id == ^job_id,
-           update: [inc: [position: 1]]
-         )
-         |> Repo.update_all([])
-
-  defp reorder_applicants_list_after_update(
-         %Applicant{job_id: job_id, list: list, position: current_position},
-         desired_position
-       )
-       when desired_position > current_position,
-       do:
-         from(a in Applicant,
-           where:
-             a.position > ^current_position and
-               a.position <= ^desired_position and
-               a.list == ^list and
-               a.job_id == ^job_id,
-           update: [inc: [position: -1]]
-         )
-         |> Repo.update_all([])
-
-  defp reorder_applicants_list_after_update(
-         %Applicant{job_id: job_id, list: list, position: current_position},
-         desired_position
        ),
        do:
-         from(a in Applicant,
-           where:
-             a.position >= ^desired_position and
-               a.position < ^current_position and
-               a.list == ^list and
-               a.job_id == ^job_id,
-           update: [inc: [position: 1]]
+         Multi.new()
+         |> Multi.update(
+           :updated_applicant,
+           change_applicant(applicant, %{list: desired_list, position: desired_position})
          )
-         |> Repo.update_all([])
+         |> Multi.update_all(
+           :update_positions_on_delete,
+           fn _ -> reorder_applicants_list_after_delete(applicant) end,
+           []
+         )
+         |> Multi.update_all(
+           :update_positions_on_insert,
+           fn %{updated_applicant: applicant} ->
+             reorder_applicants_list_after_insert(applicant)
+           end,
+           []
+         )
+         |> Repo.transaction()
 
   @doc """
   Returns the list of applicants.
@@ -196,9 +132,7 @@ defmodule WkJob.Jobs do
 
   """
   @spec list_applicants :: [Applicant.t()]
-  def list_applicants do
-    Repo.all(Applicant)
-  end
+  def list_applicants, do: Repo.all(Applicant)
 
   @doc """
   Gets a single applicant.
@@ -231,11 +165,18 @@ defmodule WkJob.Jobs do
   """
   @spec create_applicant(map()) :: applicant_response_t()
   def create_applicant(attrs \\ %{}) do
-    # TODO use a Multi pipe and reorder_applicants_list_after_adding
-
-    %Applicant{}
-    |> Applicant.changeset(attrs)
-    |> Repo.insert()
+    Multi.new()
+    |> Multi.insert(:applicant, Applicant.changeset(%Applicant{}, attrs))
+    |> Multi.update_all(
+      :update_positions_on_insert,
+      fn %{applicant: applicant} -> reorder_applicants_list_after_insert(applicant) end,
+      []
+    )
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{applicant: applicant}} -> {:ok, applicant}
+      {:error, :applicant, %Ecto.Changeset{} = changeset_errors, _} -> {:error, changeset_errors}
+    end
   end
 
   @doc """
@@ -252,10 +193,8 @@ defmodule WkJob.Jobs do
   """
   @spec update_applicant(Applicant.t(), map()) :: applicant_response_t()
   def update_applicant(%Applicant{} = applicant, attrs) do
-    # TODO use a Multi pipe and reorder_applicants_list_* if position change
-
     applicant
-    |> Applicant.changeset(attrs)
+    |> change_applicant(attrs)
     |> Repo.update()
   end
 
@@ -273,8 +212,18 @@ defmodule WkJob.Jobs do
   """
   @spec delete_applicant(Applicant.t()) :: applicant_response_t()
   def delete_applicant(%Applicant{} = applicant) do
-    # TODO use a Multi pipe and reorder_applicants_list_after_removing
-    Repo.delete(applicant)
+    Multi.new()
+    |> Multi.delete(:applicant, applicant)
+    |> Multi.update_all(
+      :update_positions_on_delete,
+      fn %{applicant: applicant} -> reorder_applicants_list_after_delete(applicant) end,
+      []
+    )
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{applicant: applicant}} -> {:ok, applicant}
+      {:error, %{applicant: applicant}} -> {:error, applicant}
+    end
   end
 
   @doc """
@@ -288,7 +237,50 @@ defmodule WkJob.Jobs do
   """
   @spec change_applicant(Applicant.t(), map()) ::
           Ecto.Changeset.t(Applicant.t())
-  def change_applicant(%Applicant{} = applicant, attrs \\ %{}) do
-    Applicant.changeset(applicant, attrs)
-  end
+  def change_applicant(%Applicant{} = applicant, attrs \\ %{}),
+    do: applicant |> Applicant.changeset(attrs)
+
+  defp reorder_applicants_list_before_update(%Applicant{} = applicant, desired_position)
+       when desired_position > applicant.position,
+       do:
+         from(a in Applicant,
+           where:
+             a.position > ^applicant.position and
+               a.position <= ^desired_position and
+               a.list == ^applicant.list and
+               a.job_id == ^applicant.job_id,
+           update: [inc: [position: -1]]
+         )
+
+  defp reorder_applicants_list_before_update(%Applicant{} = applicant, desired_position),
+    do:
+      from(a in Applicant,
+        where:
+          a.position >= ^desired_position and
+            a.position < ^applicant.position and
+            a.list == ^applicant.list and
+            a.job_id == ^applicant.job_id,
+        update: [inc: [position: 1]]
+      )
+
+  defp reorder_applicants_list_after_insert(%Applicant{} = applicant),
+    do:
+      from(a in Applicant,
+        where:
+          a.id != ^applicant.id and
+            a.position >= ^applicant.position and
+            a.list == ^applicant.list and
+            a.job_id == ^applicant.job_id,
+        update: [inc: [position: 1]]
+      )
+
+  defp reorder_applicants_list_after_delete(%Applicant{} = applicant),
+    do:
+      from(a in Applicant,
+        where:
+          a.position > ^applicant.position and
+            a.list == ^applicant.list and
+            a.job_id == ^applicant.job_id,
+        update: [inc: [position: -1]]
+      )
 end
